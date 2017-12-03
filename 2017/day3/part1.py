@@ -1,11 +1,11 @@
 import math
 
 def main(input_num):
-    coords = get_index(input_num)
+    coords = get_coords(input_num)
     return abs(coords[0]) + abs(coords[1])
 
-def get_index(number):
-    square_size = math.ceil(math.sqrt(input_num))
+def get_coords(number):
+    square_size = math.ceil(math.sqrt(number))
     square_min = int((square_size-1) ** 2)
     square_max = int(square_size ** 2)
 

@@ -27,7 +27,7 @@ class Spiral:
              out.append("{} -> {}".format(k,v))
         return "\n".join(out)
 
-    def get_adjactent(self, point):
+    def get_adjacent(self, point):
         result = []
         for p in [
             point.mod(0,1), # top
@@ -53,12 +53,11 @@ def main(input_num):
     last_val = 0
     while last_val < input_num:
         point = get_coords(iterator)
-        adjacent = data.get_adjactent(point)
+        adjacent = data.get_adjacent(point)
         last_val = sum(adjacent)
         data[point] = last_val
-        print last_val
         iterator += 1
-    return data
+    return last_val
 
 def get_coords(number):
     square_size = math.ceil(math.sqrt(number))
