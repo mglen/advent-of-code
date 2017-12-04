@@ -1,9 +1,9 @@
 def main(input_data):
     numbers = [int(x) for x in input_data]
     numbers.append(numbers[0]) # To deal with loop-around
-    return p1(numbers)
+    return get_captcha(numbers)
 
-def p1(numbers):
+def get_captcha(numbers):
     result = 0
     for i in range(0, len(numbers) - 1):
         if numbers[i] == numbers[i+1]:
