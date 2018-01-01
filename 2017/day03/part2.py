@@ -81,7 +81,8 @@ def get_coords(number):
 
     return point
 
-while True:
-    input_num = int(raw_input("Number: "))
-    print main(input_num)
+if __name__ == "__main__":
+    while True:
+        input_num = int(raw_input("Number: "))
+        print main(input_num)
 
