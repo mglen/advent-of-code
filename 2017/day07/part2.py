@@ -27,10 +27,7 @@ def make_graph(raw_tower):
     current = topitem
     tier = 0
     while True:
-        print "On tier {} with {}".format(tier, current)
-        print links[current]
         weight = {links[child]['program']: links[child]['total_weight'] for child in links[current]['children']}
-        print weight
         if all(weight.values()[0] == w for w in weight.values()):
             break
         oddweight = get_odd_out(weight.values())
@@ -39,14 +36,13 @@ def make_graph(raw_tower):
                 current = k
         tier += 1
 
-    print "GOT TO HERE!"
     goodweight = 0
     for c in links[links[current]['parent']]['children']:
-        print links[c]
         if c == current: continue
         goodweight = links[c]['total_weight']
-    print "Odd one was: {}".format(current)
-    print "Weight should be: {}".format(links[current]['total_weight'] - goodweight)
+    print "Odd one was: {}, weight: {}".format(current, links[current]["weight"])
+    print "Weight should be: {}".format(
+            links[current]["weight"] - (links[current]['total_weight'] - goodweight))
 
 def get_odd_out(weights):
     if len(weights) == 1:
