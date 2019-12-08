@@ -1,11 +1,31 @@
 (ns aoc2019.day8
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [clojure.java.io :as io])
+  (:import  (javax.imageio ImageIO)
+            (java.awt.image BufferedImage)))
+
 
 (defn get-input [ss] (str/trim-newline ss))
 
+(def height 6)
 (def width 25)
-(def layer-size (* width 6))
+(def layer-size (* width height))
 (defn get-layers [v] (partition layer-size v))
+
+(def enumerate (partial map-indexed (fn [idx v] [idx v])))
+
+(defn gif-image
+  ([layer] (gif-image layer 8))
+  ([layer size]
+   (let [buf (new BufferedImage (* width size) (* height size) BufferedImage/TYPE_BYTE_BINARY)
+         graphics (do (.createGraphics buf) (.getGraphics buf))]
+     (doall
+       (for [[y row] (enumerate (partition width layer))
+             [x pixel] (enumerate row)]
+         (condp = pixel
+           \1 (.fillRect graphics (* x size) (* y size) size size)
+           \0 (.clearRect graphics (* x size) (* y size) size size))))
+     (ImageIO/write buf "gif" (io/file "day8.gif")))))
 
 (defn merge-layers [_layers]
   (loop [index 0
@@ -35,6 +55,7 @@
 (defn part2 [encoded-image]
   (let [layers (get-layers encoded-image)
         image (merge-layers layers)]
+    (gif-image image)
     (display-image image)))
 
 (defn -main [& args]
