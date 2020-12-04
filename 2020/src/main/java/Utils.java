@@ -18,6 +18,10 @@ public class Utils {
         }
     }
 
+    public static String readFile(String filename) {
+        return readFile(filename, Files::readString);
+    }
+
     public static void println(String pattern, Object... args) {
         System.out.printf(pattern + "%n", args);
     }
@@ -34,5 +38,20 @@ public class Utils {
         public FailException(String pattern, Object... args) {
             super(String.format(pattern, args));
         }
+    }
+
+    private static <R> R readFile(String filename, FileFunction<R> f) {
+        Path path = Path.of(filename);
+        try {
+            return f.apply(path);
+        } catch (NoSuchFileException e) {
+            throw fail("File not found: " + path.toAbsolutePath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private interface FileFunction<R> {
+        R apply(Path p) throws IOException;
     }
 }
