@@ -28,30 +28,31 @@ public class Day4 {
         String[] rawPassports = Utils.readFile("day4.txt").split("\\n\\n");
 
         List<Map<String, String>> passports = Arrays.stream(rawPassports)
-                .map(v -> Arrays.stream(v.split("[\\n\\s]"))
-                        .map(fv -> {
-                            String[] entry = fv.split(":");
-                            if (entry.length != 2) throw Utils.fail("bad entry " + fv);
-                            return entry;
+                .map(rawPassport -> Arrays.stream(rawPassport.split("[\\n\\s]"))
+                        .map(pair -> {
+                            String[] fieldAndVal = pair.split(":");
+                            if (fieldAndVal.length != 2) throw Utils.fail("bad entry " + pair);
+                            return fieldAndVal;
                         })
-                        .collect(Collectors.toUnmodifiableMap(e -> e[0], e -> e[1])))
+                        .collect(Collectors.toUnmodifiableMap(
+                                fieldAndVal -> fieldAndVal[0],
+                                fieldAndVal -> fieldAndVal[1])))
                 .collect(Collectors.toList());
 
         long validPassportsP1 = passports.stream()
-                .filter(p -> p.keySet().containsAll(REQUIRED_FIELDS.keySet()))
+                .filter(passport -> passport.keySet().containsAll(REQUIRED_FIELDS.keySet()))
                 .count();
 
-        System.out.println("Day4 prt1: " + validPassportsP1);
+        System.out.println("Day4 part1: " + validPassportsP1);
 
         long validPassportsP2 = passports.stream()
                 .filter(passport -> passport.keySet().containsAll(REQUIRED_FIELDS.keySet())
                         && passport.entrySet().stream()
-                                // Only test required fields
-                                .filter(entry -> REQUIRED_FIELDS.containsKey(entry.getKey()))
-                                .allMatch(entry -> REQUIRED_FIELDS.get(entry.getKey()).test(entry.getValue())))
+                                .allMatch(entry -> REQUIRED_FIELDS.getOrDefault(entry.getKey(), _v -> true)
+                                        .test(entry.getValue())))
                 .count();
 
-        System.out.println("Day4 prt2: " + validPassportsP2);
+        System.out.println("Day4 part2: " + validPassportsP2);
     }
 
     private static boolean isNumberBetween(String val, int min, int max) {
