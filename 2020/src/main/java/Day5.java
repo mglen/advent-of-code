@@ -15,17 +15,13 @@ public class Day5 {
                     String row = boardingPass.substring(0, 7);
                     String col = boardingPass.substring(7);
 
-                    AtomicInteger counter = new AtomicInteger(64);
-                    int rowNum = row.chars().reduce(0, (acc, v) -> {
-                        int range = counter.getAndUpdate(c -> c / 2);
-                        return v == 'B' ? acc + range : acc;
-                    });
+                    int rowNum = Integer.parseInt(
+                            row.replace('B', '1').replace('F', '0'),
+                            2);
 
-                    AtomicInteger counter2 = new AtomicInteger(4);
-                    int colNum = col.chars().reduce(0, (acc, v) -> {
-                        int range = counter2.getAndUpdate(c -> c / 2);
-                        return v == 'R' ? acc + range : acc;
-                    });
+                    int colNum = Integer.parseInt(
+                            col.replace('R', '1').replace('L', '0'),
+                            2);
 
                     return rowNum * 8 + colNum;
                 })
