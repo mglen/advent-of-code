@@ -1,10 +1,6 @@
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class Day5 {
 
@@ -12,16 +8,8 @@ public class Day5 {
 
         List<Integer> sortedSeatIds = Utils.readLines("day5.txt")
                 .map(boardingPass -> {
-                    String row = boardingPass.substring(0, 7);
-                    String col = boardingPass.substring(7);
-
-                    int rowNum = Integer.parseInt(
-                            row.replace('B', '1').replace('F', '0'),
-                            2);
-
-                    int colNum = Integer.parseInt(
-                            col.replace('R', '1').replace('L', '0'),
-                            2);
+                    int rowNum = bitStrToNum(boardingPass.substring(0, 7), 'F');
+                    int colNum = bitStrToNum(boardingPass.substring(7), 'R');
 
                     return rowNum * 8 + colNum;
                 })
@@ -38,5 +26,12 @@ public class Day5 {
                         - sortedSeatIds.stream().mapToInt(i -> i).sum();
 
         System.out.println("Day5 part2: " + missingSeatNumber);
+    }
+
+    private static int bitStrToNum(String bitStr, char onBit) {
+        int r = 0;
+        for (char c : bitStr.toCharArray())
+            r = c == onBit ? (r << 1) + 1: r << 1;
+        return r;
     }
 }
