@@ -3,6 +3,8 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class Utils {
@@ -53,5 +55,40 @@ public class Utils {
 
     private interface FileFunction<R> {
         R apply(Path p) throws IOException;
+    }
+
+    public static class IdxPair<V> {
+        private int idx;
+        private V val;
+
+        public IdxPair(int idx, V val) {
+            this.idx = idx;
+            this.val = val;
+        }
+
+        public int idx() {
+            return idx;
+        }
+
+        public V val() {
+            return val;
+        }
+    }
+
+    private static <V> Iterator<IdxPair<V>> enumerate(List<V> list) {
+        return new Iterator<>() {
+            int i = 0;
+
+            @Override
+            public boolean hasNext() {
+                return i < list.size();
+            }
+
+            @Override
+            public IdxPair<V> next() {
+                int cur = i++;
+                return new IdxPair<>(cur, list.get(cur));
+            }
+        };
     }
 }
