@@ -24,6 +24,14 @@ public class Utils {
         return readFile(filename, Files::readString);
     }
 
+    public static Stream<Character> charStream(String input) {
+        Stream.Builder<Character> builder = Stream.builder();
+        for (char c : input.toCharArray()) {
+            builder.add(c);
+        }
+        return builder.build();
+    }
+
     public static void println(String pattern, Object... args) {
         System.out.printf(pattern + "%n", args);
     }
